@@ -51,12 +51,6 @@ servers:
 #     env:
 #       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_TOKEN}
 #
-#   - name: linear
-#     transport: http
-#     url: https://mcp.linear.app/mcp
-#     headers:
-#       Authorization: Bearer ${LINEAR_API_KEY}
-#
 #   - name: sentry
 #     transport: sse
 #     url: https://mcp.sentry.dev/sse

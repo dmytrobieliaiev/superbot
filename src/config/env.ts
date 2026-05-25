@@ -43,7 +43,6 @@ const EnvSchema = z.object({
   EXA_API_KEY: z.string().optional(),
   FIRECRAWL_API_KEY: z.string().optional(),
   GITHUB_TOKEN: z.string().optional(),
-  LINEAR_API_KEY: z.string().optional(),
   E2B_API_KEY: z.string().optional(),
   REPLICATE_API_TOKEN: z.string().optional(),
   REPLICATE_MODEL: z.string().optional(),

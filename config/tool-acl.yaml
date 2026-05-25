@@ -56,9 +56,6 @@ tools:
   github:
     channels: ['*']
     users: ['*']
-  linear:
-    channels: ['*']
-    users: ['*']
   calendar:
     channels: ['*']
     users: ['*']
