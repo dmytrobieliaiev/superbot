@@ -120,13 +120,16 @@ export const xlsx_build: ToolSpec<XlsxArgs> = {
       }
 
       let slackPermalink: string | undefined;
+      let slackError: string | undefined;
       if (args.upload_to_slack !== false) {
         const up = await uploadBufferToSlack(buf, {
           channel: ctx.channel_id,
+          ...(ctx.thread_ts ? { thread_ts: ctx.thread_ts } : {}),
           filename,
           title: args.title ?? filename,
         });
         if (up.ok && up.permalink) slackPermalink = up.permalink;
+        else if (!up.ok) slackError = up.error;
       }
 
       const sizeKb = (buf.length / 1024).toFixed(1);
@@ -135,6 +138,7 @@ export const xlsx_build: ToolSpec<XlsxArgs> = {
       ];
       if (slackPermalink) parts.push(`slack: ${slackPermalink}`);
       if (storageUrl) parts.push(`storage: ${storageUrl}`);
+      if (slackError) parts.push(`slack_upload_failed: ${slackError}`);
 
       return {
         status: 'ok',
