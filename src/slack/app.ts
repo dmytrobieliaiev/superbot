@@ -131,6 +131,35 @@ export async function buildApp(deps: ReceiverDeps): Promise<App> {
     );
   });
 
+  // Greet when the bot itself is invited to a channel.
+  app.event('member_joined_channel', async ({ event }) => {
+    const e = event as { user?: string; channel?: string; inviter?: string };
+    if (!e.user || !e.channel) return;
+    if (e.user !== botUserId) return; // someone else joined — ignore
+    try {
+      const inviter = e.inviter ? `<@${e.inviter}>` : 'team';
+      const text =
+        `👋 Hey ${inviter}, thanks for adding me. I'm *superbot* — your in-Slack agent.\n\n` +
+        `*What I can do here*\n` +
+        `• Answer questions, pull data, draft docs, generate xlsx/charts\n` +
+        `• Search Slack history, web, our knowledge base (Outline)\n` +
+        `• Transcribe voice memos, read attached images & PDFs\n` +
+        `• Propose recurring routines (cron) you approve with one click\n` +
+        `• Run \`/help\` any time for the full command list\n\n` +
+        `Tag me with \`@superbot\` or DM me. Reactions: 👍 boosts, 👎 triggers a review-and-retry, 📌 pins a fact.`;
+      await app.client.chat.postMessage({ channel: e.channel, text });
+      logger.info(
+        { channel: e.channel, inviter: e.inviter },
+        'bot_greeted_channel',
+      );
+    } catch (err) {
+      logger.warn(
+        { err: (err as Error).message, channel: e.channel },
+        'bot_greet_failed',
+      );
+    }
+  });
+
   // /ask uses the local `handle` closure — keep inline.
   app.command('/ask', async ({ ack, body }) => {
     await ack();
