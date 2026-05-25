@@ -24,6 +24,19 @@ servers:
     transport: http
     url: https://mcp.kiwi.com
 
+  # Multica — managed-agents platform (multica.ai). Issues / projects / agents.
+  # Tools become mcp_multica_<tool>. PAT from Settings → Personal Access Tokens
+  # or `multica login` CLI. Workspace slug (or UUID) required as default scope.
+  - name: multica
+    transport: stdio
+    command: tsx
+    args: ['mcp-servers/multica/server.ts']
+    env:
+      MULTICA_BASE_URL: ${MULTICA_BASE_URL}
+      MULTICA_API_TOKEN: ${MULTICA_API_TOKEN}
+      MULTICA_WORKSPACE_SLUG: ${MULTICA_WORKSPACE_SLUG}
+      MULTICA_WORKSPACE_ID: ${MULTICA_WORKSPACE_ID}
+
 # Examples — uncomment + configure as needed:
 #
 #   - name: filesystem
