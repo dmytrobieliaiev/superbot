@@ -1,0 +1,76 @@
+display_information:
+  name: superbot
+  description: Internal AI agent with persistent memory and tools
+  background_color: "#1a1a1a"
+features:
+  bot_user:
+    display_name: superbot
+    always_online: true
+  slash_commands:
+    - command: /ask
+      description: Ask the agent something
+      usage_hint: "<question>"
+      should_escape: false
+    - command: /memory
+      description: Show what the agent remembers about you
+      usage_hint: "show"
+      should_escape: false
+    - command: /forget
+      description: Forget a topic
+      usage_hint: "<topic>"
+      should_escape: false
+    - command: /remember
+      description: Pin a fact for the agent to remember
+      usage_hint: "<fact>"
+      should_escape: false
+    - command: /skill
+      description: Manage learned skills
+      usage_hint: "list|delete|show <args>"
+      should_escape: false
+    - command: /audit
+      description: Show audit chain for a turn
+      usage_hint: "<turn_id>"
+      should_escape: false
+    - command: /admin
+      description: Admin dashboard (gated by ADMIN_USER_IDS)
+      usage_hint: "overview|users|tools|cost|memory|queue|errors"
+      should_escape: false
+    - command: /help
+      description: Help and command reference
+      should_escape: false
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:history
+      - channels:read
+      - chat:write
+      - chat:write.public
+      - commands
+      - files:read
+      - files:write
+      - groups:history
+      - groups:read
+      - im:history
+      - im:read
+      - im:write
+      - mpim:history
+      - mpim:read
+      - reactions:read
+      - reactions:write
+      - search:read
+      - users:read
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_mention
+      - message.channels
+      - message.groups
+      - message.im
+      - message.mpim
+      - reaction_added
+  interactivity:
+    is_enabled: true
+  socket_mode_enabled: true
+  org_deploy_enabled: false
+  token_rotation_enabled: false

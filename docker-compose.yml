@@ -1,0 +1,110 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: superbot-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-superbot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-superbot}
+      POSTGRES_DB: ${POSTGRES_DB:-superbot}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-superbot}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: superbot-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    container_name: superbot-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-superbot}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-superbotsecret}
+    ports:
+      - '9000:9000'   # S3 API
+      - '9001:9001'   # Web console
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  browserless:
+    image: ghcr.io/browserless/chromium:latest
+    container_name: superbot-browserless
+    restart: unless-stopped
+    environment:
+      TOKEN: ${BROWSERLESS_TOKEN:-superbottoken}
+      CONCURRENT: '4'
+      MAX_QUEUE_LENGTH: '10'
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/pressure']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: superbot-gotenberg
+    restart: unless-stopped
+    command: ['gotenberg', '--api-timeout=60s']
+    ports:
+      - '3001:3000'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: superbot-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-superbot}:${POSTGRES_PASSWORD:-superbot}@postgres:5432/${POSTGRES_DB:-superbot}
+      REDIS_URL: redis://redis:6379
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: ${MINIO_ROOT_USER:-superbot}
+      S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-superbotsecret}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      browserless:
+        condition: service_healthy
+      gotenberg:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

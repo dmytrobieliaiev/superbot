@@ -1,0 +1,99 @@
+# Per-tool access control. Hot-reload deferred.
+# Use "*" wildcard in channels/users to allow everywhere.
+
+defaults:
+  # If a tool is not listed below, this default applies.
+  deny: false
+
+tools:
+  web_search:
+    channels: ['*']
+    users: ['*']
+  web_get:
+    channels: ['*']
+    users: ['*']
+  web_fetch:
+    channels: ['*']
+    users: ['*']
+  slack_search:
+    channels: ['*']
+    users: ['*']
+  # slack_post / slack_dm visibility — controls whether the agent SEES the tool
+  # in a given channel/user context. Defaults open; target-side allowlists live
+  # in slack_post_targets / slack_dm_targets below.
+  slack_post:
+    channels: ['*']
+    users: ['*']
+  slack_dm:
+    channels: ['*']
+    users: ['*']
+  slack_blocks:
+    channels: ['*']
+    users: ['*']
+  # slack_post_targets — target channels the agent may post to. '*' = any channel.
+  slack_post_targets:
+    channels: ['*']
+    users: ['*']
+  # slack_dm_targets — target users the agent may DM. '*' = any workspace user.
+  slack_dm_targets:
+    channels: ['*']
+    users: ['*']
+  time_now:
+    channels: ['*']
+    users: ['*']
+  db_query:
+    channels: ['*']
+    users: ['*']
+  file_read:
+    channels: ['*']
+    users: ['*']
+  vision:
+    channels: ['*']
+    users: ['*']
+  scheduler:
+    channels: ['*']
+    users: ['*']
+  github:
+    channels: ['*']
+    users: ['*']
+  linear:
+    channels: ['*']
+    users: ['*']
+  calendar:
+    channels: ['*']
+    users: ['*']
+  code_sandbox:
+    channels: ['*']
+    users: ['*']
+  image_gen:
+    channels: ['*']
+    users: ['*']
+  browser_render:
+    channels: ['*']
+    users: ['*']
+  browser_act:
+    channels: ['*']
+    users: ['*']
+  # browser_act_eval gates the `eval` action inside browser_act (arbitrary JS in page).
+  # Default deny: empty users list. Add admin user IDs to allow.
+  browser_act_eval:
+    channels: ['*']
+    users: []
+  scraper_api:
+    channels: ['*']
+    users: ['*']
+  pdf_render:
+    channels: ['*']
+    users: ['*']
+  xlsx_build:
+    channels: ['*']
+    users: ['*']
+  chart_render:
+    channels: ['*']
+    users: ['*']
+  routine_propose:
+    channels: ['*']
+    users: ['*']
+  audio_transcribe:
+    channels: ['*']
+    users: ['*']

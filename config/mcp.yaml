@@ -1,0 +1,51 @@
+# MCP (Model Context Protocol) servers. Tools exposed by these servers become
+# available to the agent alongside built-in tools, namespaced as
+# `mcp_<server_name>_<tool_name>`.
+#
+# Transports:
+#   stdio  — spawn subprocess, talk over stdin/stdout
+#   sse    — Server-Sent Events HTTP endpoint
+#   http   — Streamable HTTP (newer transport)
+#
+# Env values can interpolate ${VAR} from the process env.
+
+servers:
+  - name: outline
+    transport: stdio
+    command: tsx
+    args: ['mcp-servers/outline/server.ts']
+    env:
+      OUTLINE_BASE_URL: ${OUTLINE_BASE_URL}
+      OUTLINE_API_TOKEN: ${OUTLINE_API_TOKEN}
+
+  # Kiwi.com flight search — hosted MCP by alpic-ai.
+  # Public endpoint, no auth required. Tools become mcp_kiwi_<tool>.
+  - name: kiwi
+    transport: http
+    url: https://mcp.kiwi.com
+
+# Examples — uncomment + configure as needed:
+#
+#   - name: filesystem
+#     transport: stdio
+#     command: npx
+#     args: ['-y', '@modelcontextprotocol/server-filesystem', '/workspace/shared']
+#
+#   - name: github
+#     transport: stdio
+#     command: npx
+#     args: ['-y', '@modelcontextprotocol/server-github']
+#     env:
+#       GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_TOKEN}
+#
+#   - name: linear
+#     transport: http
+#     url: https://mcp.linear.app/mcp
+#     headers:
+#       Authorization: Bearer ${LINEAR_API_KEY}
+#
+#   - name: sentry
+#     transport: sse
+#     url: https://mcp.sentry.dev/sse
+#     headers:
+#       Authorization: Bearer ${SENTRY_AUTH_TOKEN}

@@ -1,0 +1,24 @@
+# LLM prices in USD per 1M tokens. Update as models change.
+# Unknown model falls back to "default".
+models:
+  default:
+    input_per_1m: 5.00
+    output_per_1m: 15.00
+  opus:
+    input_per_1m: 15.00
+    output_per_1m: 75.00
+  claude-opus-4-7:
+    input_per_1m: 15.00
+    output_per_1m: 75.00
+  claude-sonnet-4-6:
+    input_per_1m: 3.00
+    output_per_1m: 15.00
+  claude-haiku-4-5:
+    input_per_1m: 0.80
+    output_per_1m: 4.00
+  gpt-4o:
+    input_per_1m: 2.50
+    output_per_1m: 10.00
+  gpt-4o-mini:
+    input_per_1m: 0.15
+    output_per_1m: 0.60

@@ -1,0 +1,21 @@
+# Access control list. Hot-reload via SIGHUP (later milestone).
+
+# Channel allowlist — bot only responds in these channels.
+# Use "*" to allow all, or list channel IDs (e.g. C0123ABCDEF).
+channels:
+  allow:
+    - "*"
+  deny: []
+
+# Per-user denylist (rare use)
+users:
+  deny: []
+
+# Event kind filter — disable an entry to ignore that event class
+event_kinds:
+  enabled:
+    - mention
+    - dm
+    - shortcut
+    - command
+    - interactive

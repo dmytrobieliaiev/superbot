@@ -1,0 +1,53 @@
+// Side-effect import — registers all known tools at startup.
+// Import once from src/index.ts (or wherever the process boots).
+
+import { audio_transcribe } from './audio/transcribe.js';
+import { browser_act } from './browser/act.js';
+import { browser_render } from './browser/render.js';
+import { calendar } from './calendar/index.js';
+import { chart_render } from './chart/render.js';
+import { code_sandbox } from './code-sandbox/index.js';
+import { db_query } from './db/query.js';
+import { file_read } from './files/read.js';
+import { github } from './github/index.js';
+import { image_gen } from './image/gen.js';
+import { linear } from './linear/index.js';
+import { pdf_render } from './pdf/render.js';
+import { register } from './registry.js';
+import { routine_propose } from './routine/propose.js';
+import { scheduler } from './scheduler/index.js';
+import { scraper_api } from './scraper/index.js';
+import { slack_blocks } from './slack/blocks.js';
+import { slack_post } from './slack/post.js';
+import { slack_search } from './slack/search.js';
+import { time_now } from './time/index.js';
+import { vision } from './vision/index.js';
+import { web_fetch } from './web/fetch.js';
+import { web_get } from './web/get.js';
+import { web_search } from './web/search.js';
+import { xlsx_build } from './xlsx/build.js';
+
+register(web_search);
+register(web_get);
+register(web_fetch);
+register(slack_search);
+register(slack_post);
+register(slack_blocks);
+register(db_query);
+register(file_read);
+register(vision);
+register(scheduler);
+register(github);
+register(linear);
+register(calendar);
+register(code_sandbox);
+register(image_gen);
+register(browser_render);
+register(browser_act);
+register(audio_transcribe);
+register(scraper_api);
+register(pdf_render);
+register(time_now);
+register(xlsx_build);
+register(chart_render);
+register(routine_propose);
